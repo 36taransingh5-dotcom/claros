@@ -1,1 +1,9 @@
+node_modules
 .vercel
+dist
+.env
+*.sqlite
+*.sqlite-journal
+uploads/
+*.docx
+.DS_Store
