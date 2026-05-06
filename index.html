@@ -4,95 +4,282 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Claros | Production</title>
+    <meta name="description" content="Claros — your application is live and in production.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0d0d0d;
-            --text-primary: #f0f0f0;
-            --text-secondary: #888888;
-            --accent: #3b82f6;
+            --bg: #070b14;
+            --border: rgba(255,255,255,0.07);
+            --text-primary: #eef0f4;
+            --text-secondary: #4a566a;
+            --accent: #2563eb;
+            --accent-light: #3b82f6;
         }
-        
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body { height: 100%; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg);
             color: var(--text-primary);
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             overflow: hidden;
+            position: relative;
         }
 
+        /* Ambient radial glows */
+        .glow-top {
+            position: fixed;
+            top: -15%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 900px;
+            height: 550px;
+            background: radial-gradient(ellipse, rgba(37, 99, 235, 0.14) 0%, transparent 68%);
+            pointer-events: none;
+        }
+        .glow-bottom {
+            position: fixed;
+            bottom: -10%;
+            left: 35%;
+            width: 650px;
+            height: 400px;
+            background: radial-gradient(ellipse, rgba(59, 130, 246, 0.07) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* Subtle dot-grid texture */
+        .grid {
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px);
+            background-size: 36px 36px;
+            pointer-events: none;
+            mask-image: radial-gradient(ellipse 75% 75% at 50% 45%, black 0%, transparent 100%);
+        }
+
+        /* Main content */
         .container {
-            text-align: center;
-            animation: fadeIn 1s ease-in-out;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            animation: fadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
         }
 
-        h1 {
-            font-size: 4rem;
-            font-weight: 700;
-            letter-spacing: -0.05em;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #ffffff 0%, #a3a3a3 100%);
-            -webkit-background-clip: text;
+        /* Logo lockup */
+        .logo-lockup {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* App icon */
+        .claros-icon {
+            width: 72px;
+            height: 72px;
+            flex-shrink: 0;
+            filter: drop-shadow(0 0 24px rgba(59,130,246,0.4));
+            animation: float 7s ease-in-out infinite;
+        }
+
+        /* Separator */
+        .sep {
+            width: 1px;
+            height: 38px;
+            background: var(--border);
+            flex-shrink: 0;
+        }
+
+        /* Wordmark */
+        .wordmark {
+            font-size: 2.4rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            color: #0d1a2e;
             -webkit-text-fill-color: transparent;
+            background: linear-gradient(135deg, #e8ecf4 20%, #8fa3c8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-transform: uppercase;
+            line-height: 1;
         }
 
-        p {
-            font-size: 1.25rem;
+        /* Tagline */
+        .tagline {
+            font-size: 0.9375rem;
             color: var(--text-secondary);
             font-weight: 400;
+            letter-spacing: 0.02em;
         }
 
+        /* Status badge */
         .status {
             display: inline-flex;
             align-items: center;
-            margin-top: 2rem;
-            padding: 0.5rem 1rem;
+            gap: 0.5rem;
+            padding: 0.4rem 1rem;
             border-radius: 9999px;
-            background-color: rgba(59, 130, 246, 0.1);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            color: var(--accent);
-            font-size: 0.875rem;
+            background: rgba(37, 99, 235, 0.07);
+            border: 1px solid rgba(59, 130, 246, 0.18);
+            color: var(--accent-light);
+            font-size: 0.8125rem;
             font-weight: 500;
+            letter-spacing: 0.025em;
+            backdrop-filter: blur(10px);
         }
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background-color: var(--accent);
+        .dot {
+            width: 7px;
+            height: 7px;
+            background: var(--accent-light);
             border-radius: 50%;
-            margin-right: 0.5rem;
-            box-shadow: 0 0 8px var(--accent);
-            animation: pulse 2s infinite;
+            flex-shrink: 0;
+            animation: pulse 2.2s ease-in-out infinite;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Footer note */
+        .footer {
+            position: fixed;
+            bottom: 1.75rem;
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.06em;
+            opacity: 0.4;
+            z-index: 1;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(22px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50%       { transform: translateY(-6px); }
         }
 
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
-            70% { box-shadow: 0 0 0 6px rgba(59, 130, 246, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+            0%   { box-shadow: 0 0 0 0 rgba(59,130,246,0.75); }
+            70%  { box-shadow: 0 0 0 6px rgba(59,130,246,0); }
+            100% { box-shadow: 0 0 0 0 rgba(59,130,246,0); }
+        }
+
+        @media (max-width: 480px) {
+            .claros-icon { width: 52px; height: 52px; }
+            .wordmark { font-size: 1.75rem; }
+            .logo-lockup { gap: 14px; }
+            .sep { height: 28px; }
         }
     </style>
 </head>
 <body>
+
+    <div class="glow-top"></div>
+    <div class="glow-bottom"></div>
+    <div class="grid"></div>
+
     <div class="container">
-        <h1>Claros</h1>
-        <p>Your application is live.</p>
-        <div class="status">
-            <span class="status-dot"></span>
+
+        <!-- Logo lockup: icon + separator + wordmark -->
+        <div class="logo-lockup" aria-label="Claros logo">
+
+            <!-- App Icon — reproduced as SVG -->
+            <svg class="claros-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Claros app icon">
+                <!-- Rounded square background -->
+                <rect width="200" height="200" rx="46" fill="#0d1526"/>
+
+                <!-- White C shape: outer donut arc covering ~270° (left, top, bottom) -->
+                <!--
+                    Outer radius: 82  (center 100,100)
+                    Inner radius: 52
+                    Opening on the right side: from ~-45° to ~45° (gap of ~90°)
+                    So the arc spans from 45° to 315° going counter-clockwise
+                -->
+                <!-- Outer arc start (45° = top-right opening edge): 100+82*cos(45), 100-82*sin(45) ≈ 158,42 -->
+                <!-- Outer arc end  (315°=-45° = bottom-right):      100+82*cos(-45), 100-82*sin(-45) ≈ 158,158 -->
+                <!-- Inner arc start (back, 315°): 100+52*cos(-45), 100-52*sin(-45) ≈ 137,137 -->
+                <!-- Inner arc end   (45°):         100+52*cos(45),  100-52*sin(45)  ≈ 137,63  -->
+                <path d="
+                    M 158 42
+                    A 82 82 0 1 0 158 158
+                    L 137 137
+                    A 52 52 0 1 1 137 63
+                    Z
+                " fill="white"/>
+
+                <!-- Blue top segment: covers roughly 315°→0° (upper right gap quadrant) -->
+                <!--
+                    Outer: from 45°(158,42) going clockwise to 0°(182,100): but we want gap split into 2 blue segments
+                    Let's use angles precisely:
+                    Gap is from -45° to 45° (right opening).
+                    Top blue segment: 45° down to ~5° (i.e. nearly horizontal top)
+                    Bottom blue segment: ~-5° up to -45°
+                    
+                    Using standard math coords (right=0°, up=90°... but SVG y-down so we flip):
+                    cos/sin in screen coords: x=cx+r*cos(θ), y=cy+r*sin(θ) where 0°=right, 90°=down
+                    
+                    Top segment: θ from -45° to -5° 
+                      Outer start: 100+82*cos(-45°)=158, 100+82*sin(-45°)=42  (top right corner)
+                      Outer end:   100+82*cos(-5°)=182,  100+82*sin(-5°)=93
+                      Inner end:   100+52*cos(-5°)=152,  100+52*sin(-5°)=95
+                      Inner start: 100+52*cos(-45°)=137, 100+52*sin(-45°)=63
+                    
+                    Bottom segment: θ from 5° to 45°
+                      Outer start: 100+82*cos(5°)=182,   100+82*sin(5°)=107
+                      Outer end:   100+82*cos(45°)=158,  100+82*sin(45°)=158
+                      Inner end:   100+52*cos(45°)=137,  100+52*sin(45°)=137
+                      Inner start: 100+52*cos(5°)=152,   100+52*sin(5°)=105
+                -->
+                <!-- Top blue segment -->
+                <path d="
+                    M 158 42
+                    A 82 82 0 0 1 182 93
+                    L 152 95
+                    A 52 52 0 0 0 137 63
+                    Z
+                " fill="#1d4ed8"/>
+
+                <!-- Bottom blue segment -->
+                <path d="
+                    M 182 107
+                    A 82 82 0 0 1 158 158
+                    L 137 137
+                    A 52 52 0 0 0 152 105
+                    Z
+                " fill="#3b82f6"/>
+
+                <!-- Dividing line between the two blue segments (thin gap) -->
+                <rect x="148" y="97" width="40" height="6" fill="#0d1526"/>
+
+                <!-- Center filled circle (the hole of the C) -->
+                <circle cx="100" cy="100" r="28" fill="#0d1526"/>
+            </svg>
+
+            <div class="sep"></div>
+
+            <span class="wordmark">Claros</span>
+        </div>
+
+        <p class="tagline">Your application is live.</p>
+
+        <div class="status" id="status-badge">
+            <span class="dot"></span>
             App in Production
         </div>
+
     </div>
+
+    <p class="footer">claros &nbsp;·&nbsp; all systems operational</p>
+
 </body>
 </html>
